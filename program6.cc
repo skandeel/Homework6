@@ -10,7 +10,7 @@
 
 #define MATRIX_WIDTH 3
 #define MATRIX_HEIGHT 5
-#define BOX_WIDTH 15
+#define BOX_WIDTH 18
 #define MATRIX_NAME_STRING "Binary File Contents"
 
 const int maxRecordStringLength = 25;
@@ -91,28 +91,28 @@ int main()
   // Creating a buffer to transfer information
   char input[maxRecordStringLength];
 
-  // Filling in matrix  
-
-  sprintf(input, "Magic: %X", myHeader->magicNumber);
+  // Filling in matrix header 
+  sprintf(input, "Magic: 0x%X", myHeader->magicNumber);
   setCDKMatrixCell(myMatrix, 1, 1, input);
 
   sprintf(input, "Versions: %d", myHeader->versionsNumber);
   setCDKMatrixCell(myMatrix, 1, 2, input);
 
-  sprintf(input, "NumRecords: %d", myHeader->numRecords);
+  sprintf(input, "NumRecords: %d", int(myHeader->numRecords));
   setCDKMatrixCell(myMatrix, 1, 3, input);
+
+  // Reading in next rows 
+  int i;
+  for(i = 2; i <= 5; i++){
+    binInfile.read((char *) myRecord, sizeof(BinaryFileRecord));
  
-  setCDKMatrixCell(myMatrix, 2, 1, "strlen: ");
-  setCDKMatrixCell(myMatrix, 2, 2, "");
+    sprintf(input, "strlen: %d", int(myRecord->strLength)); 
+    setCDKMatrixCell(myMatrix, i, 1, input);
 
-  setCDKMatrixCell(myMatrix, 3, 1, "strlen: ");
-  setCDKMatrixCell(myMatrix, 3, 2, "");
-
-  setCDKMatrixCell(myMatrix, 4, 1, "strlen: ");
-  setCDKMatrixCell(myMatrix, 4, 2, "");
-
-  setCDKMatrixCell(myMatrix, 5, 1, "strlen: ");
-  setCDKMatrixCell(myMatrix, 5, 2, "");
+    sprintf(input, "%s", myRecord->stringBuffer);
+    setCDKMatrixCell(myMatrix, i, 2, input);
+  }
+  
  
   drawCDKMatrix(myMatrix, true);
 
