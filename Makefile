@@ -3,7 +3,7 @@
 # CS 3377.501
 
 CXX = g++
-CXXFLAGS = -Wall -g 
+CXXFLAGS = -Wall -g -Wno-write-strings 
 CPPFLAGS = -I/scratch/perkins/include
 LDFLAGS = -L/scratch/perkins/lib
 LDLIBS = -lcdk -lcurses 
